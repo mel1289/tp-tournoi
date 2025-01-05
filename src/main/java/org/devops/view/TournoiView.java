@@ -1,10 +1,7 @@
 package org.devops.view;
 
-import org.devops.event.Event;
-import org.devops.services.equipe.events.AfficherEquipesEvent;
-import org.devops.services.equipe.Equipe;
-
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class TournoiView {
@@ -13,34 +10,53 @@ public class TournoiView {
     public int afficherMenu() {
         System.out.println("=== Gestionnaire de Tournoi ===");
         System.out.println("1. Ajouter une équipe");
-        System.out.println("2. Afficher les équipes");
-        System.out.println("3. Organiser un match");
-        System.out.println("4. Quitter");
+        System.out.println("2. Organiser un match");
+        System.out.println("3. Supprimer une équipe");
+        System.out.println("4. Afficher le classement");
+        System.out.println("5. Quitter");
         System.out.print("Choix : ");
-        return scanner.nextInt();
-    }
-
-    private void afficherEquipes(Event event) {
-        if (event instanceof AfficherEquipesEvent equipesEvent) {
-            List<Equipe> equipes = equipesEvent.getEquipes();
-            System.out.println("=== Liste des Équipes ===");
-            if (equipes.isEmpty()) {
-                System.out.println("Aucune équipe n'a été créée pour l'instant.");
-            } else {
-                for (Equipe equipe : equipes) {
-                    System.out.println("- " + equipe.getNom());
-                }
-            }
-        }
+        int choix = scanner.nextInt();
+        scanner.nextLine();
+        return choix;
     }
 
     public String saisirNomEquipe() {
         System.out.print("Nom de l'équipe : ");
-        return scanner.next();
+        return scanner.nextLine();
+    }
+
+    public String saisirNomEquipe(String message) {
+        System.out.print(message);
+        return scanner.nextLine();
+    }
+
+    public int saisirScore(String teamName) {
+        System.out.print("Score de " + teamName + " : ");
+        int score = scanner.nextInt();
+        scanner.nextLine();
+        return score;
     }
 
     public void afficherMessage(String message) {
         System.out.println(message);
     }
-}
 
+    public void afficherClassement(BufferedReader reader) {
+        System.out.println("=== Classement des équipes ===");
+        try {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.equals("END")) {
+                    break;
+                }
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            afficherErreur("Erreur lors de l'affichage du classement : " + e.getMessage());
+        }
+    }
+
+    public void afficherErreur(String message) {
+        System.err.println("[Erreur] " + message);
+    }
+}

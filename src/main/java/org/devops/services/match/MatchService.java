@@ -6,7 +6,6 @@ import org.devops.event.EventBus;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.lang.reflect.Type;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import java.util.List;
 
 public class MatchService {
     private final EventBus eventBus;
-    private List<String> availableTeams = new ArrayList<>();;
+    private List<String> availableTeams = new ArrayList<>();
     private final Gson gson = new Gson();
 
     public MatchService(EventBus eventBus) {
@@ -63,6 +62,7 @@ public class MatchService {
 
                     String team1 = parts[1];
                     String team2 = parts[2];
+
                     int score1 = Integer.parseInt(parts[3]);
                     int score2 = Integer.parseInt(parts[4]);
 
@@ -95,46 +95,4 @@ public class MatchService {
             e.printStackTrace();
         }
     }
-
-    /*
-
-    public void start(int port) {
-        new Thread(() -> {
-            try (ServerSocket serverSocket = new ServerSocket(port)) {
-                System.out.println("MatchService started on port " + port);
-
-                try (Socket socket = serverSocket.accept();
-                     BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                     PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
-
-                    String command;
-
-                    while ((command = reader.readLine()) != null) {
-                        if (command.startsWith("ORGANIZE_MATCH")) {
-                            String[] parts = command.split(":");
-
-                            String team1 = parts[1];
-                            String team2 = parts[2];
-
-                            int score1 = Integer.parseInt(parts[3]);
-                            int score2 = Integer.parseInt(parts[4]);
-
-                            eventBus.publish("GET_TEAMS", "");
-
-                            if (!availableTeams.contains(team1) || !availableTeams.contains(team2)) {
-                                System.out.println("Une des équipes ou les deux n'existe pas.");
-                                return;
-                            }
-
-                            eventBus.publish("MATCH_ORGANISE", "Un match est organisé entre " + team1 + " et " + team2);
-                            eventBus.publish("MATCH_TERMINE", team1 + ":" + team2 + ":" + score1 + ":" + score2);
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }*/
-
 }

@@ -8,7 +8,7 @@ import org.devops.services.notification.NotificationService;
 
 public class Main {
     public static void main(String[] args) {
-        EventBus eventBus = new EventBus();
+        EventBus eventBus = EventBus.getInstance();
 
         EquipeService teamService = new EquipeService(eventBus);
         MatchService matchService = new MatchService(eventBus);

@@ -6,7 +6,18 @@ import java.util.List;
 import java.util.Map;
 
 public class EventBus {
+    private static EventBus instance;
+
     private final Map<String, List<EventListener>> listeners = new HashMap<>();
+
+    private EventBus() {}
+
+    public static synchronized EventBus getInstance() {
+        if (instance == null) {
+            instance = new EventBus();
+        }
+        return instance;
+    }
 
     public synchronized void subscribe(String eventType, EventListener listener) {
         listeners.computeIfAbsent(eventType, k -> new ArrayList<>()).add(listener);
@@ -23,4 +34,3 @@ public class EventBus {
         void onEvent(String eventType, String eventData);
     }
 }
-

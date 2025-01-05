@@ -71,7 +71,13 @@ public class EquipeService {
             while ((command = reader.readLine()) != null) {
                 if (command.startsWith("ADD_TEAM")) {
                     String teamName = command.split(":")[1];
-                    teams.add(new Equipe(teamName));
+
+                    Equipe newTeam = new Equipe.Builder()
+                            .setNom(teamName)
+                            .setPoints(0)
+                            .build();
+
+                    teams.add(newTeam);
                     eventBus.publish("NOUVELLE_EQUIPE_CREE", teamName);
                     writer.println("ACK: Team " + teamName + " added.");
                 } else if (command.startsWith("REMOVE_TEAM")) {
